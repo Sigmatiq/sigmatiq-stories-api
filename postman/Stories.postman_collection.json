@@ -1,0 +1,33 @@
+{
+  "info": {
+    "name": "Sigma Stories — Compose",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "10000000-0000-0000-0000-0000000sstory",
+    "description": "Standalone compose endpoints for Sigma Stories (sync + async) with WS instructions."
+  },
+  "item": [
+    {
+      "name": "Compose (sync)",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw": "{\n  \\\"context\\\": \\\"screener\\\",\n  \\\"persona\\\": \\\"novice\\\",\n  \\\"data\\\": { \\\"core_result\\\": { \\\"matched\\\": [\\\"AAPL\\\", \\\"MSFT\\\", \\\"NVDA\\\"] } },\n  \\\"options\\\": { \\\"visuals\\\": true, \\\"max_symbols\\\": 5 }\n}"},
+        "url": "{{baseUrl}}/assistant/stories/compose"
+      }
+    },
+    {
+      "name": "Compose (async job)",
+      "event": [{"listen":"test","script":{"type":"text/javascript","exec":["const res=pm.response.json();","pm.test('job_id present', function(){ pm.expect(res.job_id).to.exist; });","pm.collectionVariables.set('story_job_id', res.job_id);"]}}],
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw": "{\n  \\\"context\\\": \\\"screener\\\",\n  \\\"persona\\\": \\\"novice\\\",\n  \\\"data\\\": { \\\"core_result\\\": { \\\"matched\\\": [\\\"AAPL\\\", \\\"MSFT\\\", \\\"NVDA\\\"] } },\n  \\\"options\\\": { \\\"visuals\\\": true }\n}"},
+        "url": "{{baseUrl}}/assistant/stories/compose_async"
+      }
+    }
+  ],
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:8090"},
+    {"key": "story_job_id", "value": ""}
+  ]
+}
