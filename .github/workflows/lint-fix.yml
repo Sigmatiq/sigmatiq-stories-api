@@ -1,0 +1,7 @@
+name: Dev - Python Lint Fix
+on:
+  workflow_dispatch:
+jobs:
+  fix:
+    uses: Sigmatiq/sigmatiq-orchestrator/.github/workflows/reusable-python-lint-fix.yml@main
+    with: { python_version: '3.11' }
