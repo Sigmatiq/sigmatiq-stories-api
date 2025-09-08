@@ -1,0 +1,7 @@
+# CODEOWNERS
+# Update team handles to match your org teams before enabling required CODEOWNER reviews.
+# Examples (uncomment and adjust):
+# /api/*             @Sigmatiq/backend-team
+# /sigma_core/**     @Sigmatiq/data-team
+# /src/**            @Sigmatiq/web-team
+# *                  @Sigmatiq/maintainers
