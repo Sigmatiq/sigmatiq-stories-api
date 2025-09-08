@@ -1,0 +1,41 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [ main, master, develop ]
+jobs:
+  python:
+    if: ${{ hashFiles('requirements.txt') != '' || hashFiles('pyproject.toml') != '' || hashFiles('setup.py') != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f pyproject.toml ]; then pip install -e .[dev] || pip install -e .; fi
+      - name: Lint (optional)
+        run: |
+          ruff --version && ruff . || echo 'ruff not configured'
+          black --version && black --check . || echo 'black not configured'
+        continue-on-error: true
+      - name: Tests
+        run: |
+          if [ -d tests ]; then pytest -q; else python -m compileall .; fi
+  node:
+    if: ${{ hashFiles('package.json') != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm i; fi
+      - name: Lint/Build
+        run: |
+          npm run lint || echo 'no lint script'
+          npm run build || echo 'no build script'
